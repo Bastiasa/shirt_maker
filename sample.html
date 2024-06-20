@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="viewer-style.css?v=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    
+    <style>
+        body {margin: 0;}
+        canvas {display: block;}
+
+        #shirt-model-container {
+            width: 80%;
+            aspect-ratio: 1;
+        }
+
+        main {
+            width: 100%;
+            max-width: 500px;
+            padding: 0 10px;
+
+            box-sizing: border-box;
+
+            display: block;
+
+            margin: 10px auto;
+        }
+
+        main > * {
+            margin: 13px 0 0 0 !important;
+        }
+
+        main > *:last-child {
+            margin: 0 !important;
+        }
+
+        #loading-container {
+            width: 100%;
+            height: 25px;
+            background-color: gray;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        #loading-fill {
+            background-color: blueviolet;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+        #color-changer-container {
+            width: 100%;
+            height: 60px;
+            box-sizing: border-box;
+            overflow-y: hidden;
+            overflow-x: auto;
+
+            text-wrap: nowrap;
+            margin-top: 10px;
+        }
+
+        #color-changer-container > * {
+            display: inline-block;
+            margin: 0 10px 0 0 ;
+
+            height: 100%;
+
+            aspect-ratio: 1;
+            border-radius: 10px;
+            border: 1px solid gray;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        canvas {
+            border-radius: 10px;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/OBJLoader.js"></script>
+    <script src="vectors.js?v=1.0"></script>
+
+
+    <main>
+        <div id="shirt-model-container" style="width: 79%; margin: 0 auto !important;"></div>
+
+        <div id="color-changer-container"></div>
+
+        <input accept="image/*" type="file" style="display: none;" name="" id="image-input">
+
+        <div class="container">
+            <label for="image-input">SUBIR IMAGEN</label>
+            <button id="switch-limits">DETRÁS</button>
+        </div>
+        
+
+        <div>
+            <input type="range" max="1" step="0.01" id="hmovement">
+            <span onclick="hMovement.value = .5; verifyAll();" class="material-symbols-outlined">swap_horiz</span>
+        </div>
+        
+        <div>
+            <input type="range" max="1" step="0.01" id="vmovement">
+            <span onclick="vMovement.value = .5; verifyAll();" class="material-symbols-outlined">swap_vert</span>
+        </div>
+
+        <div>
+            <input type="range" min="0.25" value="1" max="1" step="0.01" id="scale">
+            <span onclick="scale.value = 1; verifyAll();" class="material-symbols-outlined">aspect_ratio</span>
+        </div>
+
+        <div>
+            <input type="range" min="-360" max="360" step="1" value="0" id="rotation">
+            <span onclick="rotation.value = 0; verifyAll();" class="material-symbols-outlined">cached</span>
+        </div>
+
+        <p>"Oversized t-shirt" (https://skfb.ly/oQRZL) by kylelhb is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).</p>
+        
+    </main>
+
+    <style>
+        .container {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .container > *{
+            margin: 0 10px 0 0;
+        }
+
+        .container > *:last-child {
+            margin: 0;
+        }
+
+
+        label[for=image-input], button {
+            display: block;
+            width: 100%;
+            font-size: 16px;
+            background-color: #d7063e;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        input[type=range] {
+            display: inline-block;
+            height: 30px;
+
+            margin: 0;
+
+            width: 75%;
+            box-sizing: border-box;
+        }
+
+        div span {
+            width: 23%;
+            display: inline-block !important;
+            text-align: center;
+            box-sizing: border-box;
+        }
+    </style>
+
+    
+
+    
+    <script src="viewer.js?v=2.4"></script>
+    <script>
+        const shirtModelContainer = document.getElementById('shirt-model-container');
+        const shirtViewer = new Shirt3DViewer(shirtModelContainer, 1);
+
+        const colorChangerContainer = document.getElementById('color-changer-container');
+
+        for(const style of shirtViewer.styles) {
+            const newChooser = document.createElement("div");
+            
+            newChooser.style.backgroundColor = style.representativeColor;
+            newChooser.onclick = ()=>shirtViewer.setStyle(style);
+
+            colorChangerContainer.appendChild(newChooser);
+        }
+
+        const hMovement = document.querySelector("#hmovement");
+        const vMovement = document.querySelector("#vmovement");
+        const rotation = document.querySelector("#rotation");
+        const scale = document.querySelector("#scale");
+
+        const events = ["input", "change"];
+        
+        events.forEach((eventName)=> {
+            hMovement.addEventListener(eventName, ()=> {
+                if(shirtViewer.canvasManager instanceof CanvasManager) {
+                    shirtViewer.canvasManager.setImagePositionPercent(new Vector(parseFloat(hMovement.value), shirtViewer.canvasManager.imagePositionPercent.y))
+                }
+            });
+
+            vMovement.addEventListener(eventName, ()=> {
+                if(shirtViewer.canvasManager instanceof CanvasManager) {
+                    shirtViewer.canvasManager.setImagePositionPercent(new Vector(shirtViewer.canvasManager.imagePositionPercent.x, parseFloat(vMovement.value)))
+                }
+            });
+
+            rotation.addEventListener(eventName, ()=> {
+                if(shirtViewer.canvasManager instanceof CanvasManager) {
+                    shirtViewer.canvasManager.setImageRotation(parseFloat(rotation.value));
+                }
+            });
+
+            scale.addEventListener(eventName, () => {
+                if(shirtViewer.canvasManager instanceof CanvasManager) {
+                    shirtViewer.canvasManager.scale = parseFloat(scale.value);
+                }
+            });
+        })
+
+
+
+        function verifyAll() {
+            const event = new Event('change');
+
+            hMovement.dispatchEvent(event);
+            vMovement.dispatchEvent(event);
+            rotation.dispatchEvent(event);
+            scale.dispatchEvent(event);
+        }
+
+        const imageInput = document.querySelector("input#image-input")
+
+        imageInput.addEventListener("input", (e)=>{
+            const file = (imageInput.files[0]);
+
+            file.arrayBuffer().then( buffer => {
+                const blob = new Blob([buffer], {type:file.type});
+                const imageUrl = URL.createObjectURL(blob);
+
+                const canvasManager = shirtViewer.canvasManager;
+
+                if(canvasManager instanceof CanvasManager) {
+                    canvasManager.setImagePositionPercent(new Vector(parseFloat(hMovement.value), parseFloat(vMovement.value)));
+                    canvasManager.setImageRotation(rotation.value);
+                    canvasManager.scale = parseFloat(scale.value);
+                    canvasManager.currentImage.src = (imageUrl);
+                }
+
+            });
+        });
+
+        const switchLimitsButton = document.querySelector("#switch-limits");
+
+        switchLimitsButton.onclick = () => {
+            const canvasManager = shirtViewer.canvasManager;
+
+            if(canvasManager instanceof CanvasManager) {
+                canvasManager.imageLimit = (canvasManager.imageLimit == forwardsLimits) ? backwardsLimits : forwardsLimits;
+                switchLimitsButton.textContent = (canvasManager.imageLimit !== forwardsLimits) ? "DELANTE" : "DETRÁS";
+            }
+            
+        }
+
+    </script>
+    
+</body>
+</html>

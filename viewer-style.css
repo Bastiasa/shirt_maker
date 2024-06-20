@@ -1,0 +1,98 @@
+#shirt-viewer-container {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8.5px;
+
+    display: block;
+    position: relative;
+    
+    overflow: hidden;
+}
+
+#shirt-viewer-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#shirt-viewer-container .placeholder-foreground {
+    position: absolute;
+
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+
+    background-color: rgb(224, 224, 224);
+    transition: opacity 200ms ease;
+
+    opacity: 1;
+}
+
+@keyframes spinning-animation {
+    from {
+        transform: translate(-50%, -50%) rotate(0);
+    } to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+#shirt-viewer-container .placeholder-foreground.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.placeholder-foreground .spin {
+    position: absolute;
+    --thickness:10px;
+    width: 64px;
+    height: 64px;
+    border: var(--thickness) solid #d7063e;
+    border-top: var(--thickness) solid transparent;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    box-sizing: border-box;
+    animation: spinning-animation 0.5s infinite forwards;
+    transition: opacity 200ms cubic-bezier(0.25, 0.1, 0.49, 0.64);
+    transition-property: opacity, width, height;
+}
+
+.progressbar-bg {
+    position: absolute;
+
+    width: 67%;
+    height: 32px;
+    
+
+    border-radius: 8.5px;
+    overflow: hidden;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) scale(1);
+
+    background-color: white;
+    transition: transform 500ms ease;
+    transition-property: transform, opacity;
+}
+
+.progressbar-fg {
+    position: absolute;
+    
+    top: 0;
+    left: 0;
+
+    height: 100%;
+
+    background-color: #d7063e;
+}
+
+.progressbar-bg.hidden {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.75);
+}
+
+.spin.hidden {
+    opacity: 0;
+    height: 0;
+    width: 0;
+}

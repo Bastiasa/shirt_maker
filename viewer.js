@@ -426,7 +426,7 @@ class Shirt3DViewer {
         requestAnimationFrame(this.animate.bind(this));
     }
 
-    async setStyle(newStyle, loadingMode = true, updateCanvas = true) {
+    async setStyle(newStyle, loadingMode = false, updateCanvas = true) {
         if (this.shirt != null) {
 
             if (loadingMode) {
@@ -434,12 +434,10 @@ class Shirt3DViewer {
             }
 
             this.scene.background = newStyle.backgroundColor;
-            this.setMode('none');
 
             if (this.canvasManager instanceof CanvasManager && updateCanvas) {
-
-                this.canvasManager.templateImageUrl = newStyle.texturePath;
-                this.canvasManager.templateImage.src = newStyle.texturePath;
+                this.canvasManager.templateImageUrl = newStyle.loadedTexture;
+                this.canvasManager.templateImage.src = newStyle.loadedTexture;
 
             }
             
@@ -451,6 +449,87 @@ class Shirt3DViewer {
                 this.shirt.children[0].material.map = this.canvasTexture;
             }
         }
+    }
+
+    pushShirtModel(modelUrl) {
+        const loader = new THREE.OBJLoader();
+
+        this.setMode('progressBar');
+        this.progressBarTargetValue = 0;
+
+        loader.load(
+            modelUrl,
+
+            (object) => {
+                this.scene.add(object);
+                
+                this.shirt = object;
+
+                this.shirtTargetRotation.x = this.shirt.rotation.y;
+                this.shirtTargetRotation.y = this.shirt.rotation.x;
+
+                this.setStyle(this.styles[0]);
+                this.setMode("none");
+            },
+
+            (xhr) => {
+
+                if (typeof shirtLoadingProgress == "function") {
+                    shirtLoadingProgress(xhr.loaded / xhr.total);
+                }
+
+                this.progressBarTargetValue = xhr.loaded / xhr.total;
+
+            },
+
+            (error) => {
+                console.log('Ocurrió un error al cargar el modelo.', error);
+            }
+        );
+    }
+
+    downloadAndDecompress3DModel() {
+
+        const xhr = new XMLHttpRequest();
+
+        this.setMode('progressBar');
+
+        xhr.open("GET", "/shirt_model.zip");
+
+        xhr.onprogress = (e => {
+            const percent = e.loaded / e.total;
+            if (isFinite(percent)) {
+                console.log("Downloading compressed shirt model", (percent * 100.0).toFixed(2).toString() + "%");
+                this.progressBarTargetValue = percent; 
+            }
+        }).bind(this);
+
+        xhr.onload = e => {
+            if (xhr.status !== 200) {
+                console.error("Could not download the shirt model.");
+                return;
+            }
+
+            console.log("Compressed shirt model downloaded. Decompressing.");
+
+            this.setMode("spinner");
+            
+            const encodedModel = xhr.response;
+
+            JSZip.loadAsync(encodedModel).then(files => {
+                files.forEach((filename, file) => {
+                    file.async('blob').then((decodedModel) => {
+                        const modelUrl = URL.createObjectURL(decodedModel);                        
+                        console.log("Model decompressed. URL: ", modelUrl);
+                        this.pushShirtModel(modelUrl);
+                    });
+                });
+            });
+    
+        }
+
+        xhr.responseType = 'arraybuffer';
+        xhr.send();
     }
 
     constructor(parentElement, aspectRatio, shirtLoadingProgress, minTargetRotation = new Vector(NaN, -0.38), maxTargetRotation = new Vector(NaN, 1)) {
@@ -529,38 +608,8 @@ class Shirt3DViewer {
         light.position.set(0, 0, 5).normalize();
         this.scene.add(light);
 
-        const loader = new THREE.OBJLoader();
 
-        this.setMode('progressBar');
-
-        loader.load(
-            'oversized-t-shirt/oversized-tshirt1.obj',
-            (object) => {
-                this.scene.add(object);
-                
-                this.shirt = object;
-
-                this.shirtTargetRotation.x = this.shirt.rotation.y;
-                this.shirtTargetRotation.y = this.shirt.rotation.x;
-
-                this.setStyle(this.styles[0]);
-            },
-
-            (xhr) => {
-
-                if (typeof shirtLoadingProgress == "function") {
-                    shirtLoadingProgress(xhr.loaded / xhr.total);
-                }
-
-                this.progressBarTargetValue = xhr.loaded / xhr.total;
-
-            },
-
-            (error) => {
-                console.log('Ocurrió un error al cargar el modelo.', error);
-            }
-        );
-
+        this.downloadAndDecompress3DModel();
         this.animate();
     }
 }

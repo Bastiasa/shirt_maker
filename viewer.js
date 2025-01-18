@@ -494,7 +494,7 @@ class Shirt3DViewer {
 
         this.setMode('progressBar');
 
-        xhr.open("GET", "/shirt_model.zip");
+        xhr.open("GET", "shirt_model.zip");
 
         xhr.onprogress = (e => {
             const percent = e.loaded / e.total;

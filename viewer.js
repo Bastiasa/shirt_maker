@@ -436,8 +436,8 @@ class Shirt3DViewer {
             this.scene.background = newStyle.backgroundColor;
 
             if (this.canvasManager instanceof CanvasManager && updateCanvas) {
-                this.canvasManager.templateImageUrl = newStyle.loadedTexture;
-                this.canvasManager.templateImage.src = newStyle.loadedTexture;
+                this.canvasManager.templateImageUrl = newStyle.texturePath;
+                this.canvasManager.templateImage.src = newStyle.texturePath;
 
             }
             

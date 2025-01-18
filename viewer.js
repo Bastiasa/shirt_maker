@@ -430,7 +430,7 @@ class Shirt3DViewer {
         if (this.shirt != null) {
 
             if (loadingMode) {
-                this.setMode('spinner');
+                // this.setMode('spinner');
             }
 
             this.scene.background = newStyle.backgroundColor;

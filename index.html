@@ -122,8 +122,8 @@
         <input accept="image/*" type="file" style="display: none;" name="" id="image-input">
 
         <div class="container">
-            <label for="image-input">SUBIR IMAGEN</label>
-            <button id="switch-limits">DETRÁS</button>
+            <label for="image-input">UPLOAD IMAGE</label>
+            <button id="switch-limits">BACK</button>
         </div>
         
 
@@ -295,7 +295,7 @@
 
             if(canvasManager instanceof CanvasManager) {
                 canvasManager.imageLimit = (canvasManager.imageLimit == forwardsLimits) ? backwardsLimits : forwardsLimits;
-                switchLimitsButton.textContent = (canvasManager.imageLimit !== forwardsLimits) ? "DELANTE" : "DETRÁS";
+                switchLimitsButton.textContent = (canvasManager.imageLimit !== forwardsLimits) ? "FRONT" : "BACK";
             }
             
         }

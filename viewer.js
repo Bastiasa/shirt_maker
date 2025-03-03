@@ -23,13 +23,13 @@ function createElement(tagName, properties = {}) {
 }
 
 const backwardsLimits = [
-    new Vector(637.285, 441.305),
-    new Vector(335.561, 532.950)
+    new Vector(606.545, 134.339),
+    new Vector(324.255, 598.978)
 ]
 
 const forwardsLimits = [
-    new Vector(122.663, 468.293),
-    new Vector(377.859, 518.472)
+    new Vector(77.791, 98.222),
+    new Vector(353.148, 614.664)
 ]
 
 class CanvasManager {
@@ -272,15 +272,15 @@ class Shirt3DViewer {
 
     styles = [
     
-        this.makeStyle('oversized-t-shirt/oversized-tshirt_diffuse_1001.png', '#ffffff', this.COLORS.gray),
-        this.makeStyle('oversized-t-shirt/alternative_textures/red.png', '#e40000'),
-        this.makeStyle('oversized-t-shirt/alternative_textures/blue.png', '#0000de'),
-        this.makeStyle('oversized-t-shirt/alternative_textures/whiteblue.png', '#00e3e5'),
-        this.makeStyle('oversized-t-shirt/alternative_textures/purple.png', '#d400e4'),
-        this.makeStyle('oversized-t-shirt/alternative_textures/pink.png', '#f76cf5'),
-        this.makeStyle('oversized-t-shirt/alternative_textures/yellow.png', '#e3e500'),
-        this.makeStyle('oversized-t-shirt/alternative_textures/orange.png', '#ff9c21'),
-        this.makeStyle('oversized-t-shirt/alternative_textures/black.png', '#1b1b1b'),
+        this.makeStyle('textures/white.png', '#ffffff', this.COLORS.gray),
+        this.makeStyle('textures/red.png', '#e40000'),
+        this.makeStyle('textures/blue.png', '#0000de'),
+        this.makeStyle('textures/whiteblue.png', '#00e3e5'),
+        this.makeStyle('textures/purple.png', '#d400e4'),
+        this.makeStyle('textures/pink.png', '#f76cf5'),
+        this.makeStyle('textures/yellow.png', '#e3e500'),
+        this.makeStyle('textures/orange.png', '#ff9c21'),
+        this.makeStyle('textures/black.png', '#1b1b1b'),
     ]
 
     textureLoader = new THREE.TextureLoader();
@@ -447,6 +447,7 @@ class Shirt3DViewer {
                 this.canvasTexture = new THREE.CanvasTexture(this.canvasManager.canvasElement);
 
                 this.shirt.children[0].material.map = this.canvasTexture;
+                this.shirt.children[0].material.side = THREE.DoubleSide;
             }
         }
     }
@@ -461,12 +462,19 @@ class Shirt3DViewer {
             modelUrl,
 
             (object) => {
+
+                window.shirtObject = object;
+                
                 this.scene.add(object);
                 
                 this.shirt = object;
 
                 this.shirtTargetRotation.x = this.shirt.rotation.y;
                 this.shirtTargetRotation.y = this.shirt.rotation.x;
+
+                object.scale.x = 0.04;
+                object.scale.y = 0.04;
+                object.scale.z = 0.04;
 
                 this.setStyle(this.styles[0]);
                 this.setMode("none");
@@ -483,7 +491,7 @@ class Shirt3DViewer {
             },
 
             (error) => {
-                console.log('Ocurrió un error al cargar el modelo.', error);
+                console.error('Ocurrió un error al cargar el modelo.', error);
             }
         );
     }
@@ -494,7 +502,7 @@ class Shirt3DViewer {
 
         this.setMode('progressBar');
 
-        xhr.open("GET", "shirt_model.zip");
+        xhr.open("GET", "shirt.zip");
 
         xhr.onprogress = (e => {
             const percent = e.loaded / e.total;

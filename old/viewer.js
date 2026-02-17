@@ -1,3 +1,4 @@
+// viewer.js
 // import * as THREE from 'three';
 
 /**
@@ -446,6 +447,7 @@ class Shirt3DViewer {
                 this.canvasManager = new CanvasManager(this.container.parentElement, newStyle.texturePath, '', Vector.both(0.5), forwardsLimits);
                 this.canvasTexture = new THREE.CanvasTexture(this.canvasManager.canvasElement);
 
+                
                 this.shirt.children[0].material.map = this.canvasTexture;
                 this.shirt.children[0].material.side = THREE.DoubleSide;
             }

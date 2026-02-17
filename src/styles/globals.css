@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    margin-top: 10px;
+}
+
+.container > *{
+    margin: 0 10px 0 0;
+}
+
+.container > *:last-child {
+    margin: 0;
+}
+
+
+label[for=image-input], button {
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    background-color: #d7063e;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+input[type=range] {
+    display: inline-block;
+    height: 30px;
+
+    margin: 0;
+
+    width: 75%;
+    box-sizing: border-box;
+}
+
+div span {
+    width: 23%;
+    display: inline-block !important;
+    text-align: center;
+    box-sizing: border-box;
+}

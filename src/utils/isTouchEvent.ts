@@ -1,0 +1,1 @@
+export const isTouchEvent = (e:Event) => window.TouchEvent && e instanceof TouchEvent;

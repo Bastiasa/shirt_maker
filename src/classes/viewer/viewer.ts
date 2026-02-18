@@ -1,16 +1,16 @@
 // viewer.ts
 
 import * as THREE from 'three';
-import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader.js'
 import JSZip from 'jszip';
 import { createElement } from '../../utils/createElement';
 import { Vector } from '../vector';
 import { ElementBuilder } from '../element-builder';
 
-import './viewer-style.css';
 import { isTouchEvent } from '../../utils/isTouchEvent';
-import type { PhongLightingModel } from 'three/webgpu';
-import { BufferGeometryUtils, GLTFLoader } from 'three/examples/jsm/Addons.js';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+
+import './viewer-style.css';
+import { BASE_URL } from '../../utils/basePath';
 
 declare global {
     interface Window {
@@ -296,7 +296,7 @@ export class ShirtStyle {
         backgroundColor = this.BACKGROUND_COLORS.blank
     ) {
         return new ShirtStyle(
-            `/model/textures/${textureName}`,
+            `${BASE_URL}model/textures/${textureName}`,
             backgroundColor,
             ((representativeColor.startsWith("#")) ? representativeColor : "#" + representativeColor) as ColorHEXString
         );
@@ -640,7 +640,7 @@ export class Shirt3DViewer {
 
             this.setMode('progressBar');
 
-            xhr.open("GET", "/model/shirt-lowres-glb.zip");
+            xhr.open("GET", `${BASE_URL}model/shirt-lowres-glb.zip`);
 
             xhr.onprogress = ((e:ProgressEvent) => {
                 const percent = e.loaded / e.total;

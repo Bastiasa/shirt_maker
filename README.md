@@ -15,6 +15,6 @@ Welcome there! **Shirt Maker 3D** is a website where you can make mockups of shi
 
 | | | |
 | - | - | - |
-| ![](.wacky/hrotate.gif) | ![](.wacky/vrotate.gif) | ![](.wacky/scale.gif) |
-| ![](.wacky/hmove.gif) | ![](.wacky/vmove.gif) | ![](.wacky/rotate.gif) |
+| ![](.wacky/hrotate.webp) | ![](.wacky/vrotate.webp) | ![](.wacky/scale.webp) |
+| ![](.wacky/hmove.webp) | ![](.wacky/vmove.webp) | ![](.wacky/rotate.webp) |
 

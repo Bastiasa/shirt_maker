@@ -1,5 +1,5 @@
 
-gifs_width="320"
+gifs_width="512"
 
 gifs=(
     hrotate
@@ -11,14 +11,7 @@ gifs=(
 )
 
 for gif_name in "${gifs[@]}"; do
-
-    vf_start="fps=15,scale=$gifs_width:-1:flags=lanczos"
-    
-    ffmpeg -i "$gif_name.mp4" -vf "$vf_start,palettegen" palette.png -y
-    
-    ffmpeg -i "$gif_name.mp4" -i palette.png -filter_complex \
-    "$vf_start[x];[x][1:v]paletteuse" "$gif_name.gif" -y
-
+    ffmpeg -i "$gif_name.mp4" -vf "fps=15,scale=$gifs_width:-1" "$gif_name.webp" -y
 done
 
 rm palette.png

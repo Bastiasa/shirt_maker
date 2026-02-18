@@ -13,8 +13,7 @@
 
 Welcome there! **Shirt Maker 3D** is a website where you can make mockups of shirts with by uploading your own image. [Check it here](https://bastiasa.github.io/shirt_maker).
 
-| | | |
-| - | - | - |
 | ![](.wacky/hrotate.webp) | ![](.wacky/vrotate.webp) | ![](.wacky/scale.webp) |
+| - | - | - |
 | ![](.wacky/hmove.webp) | ![](.wacky/vmove.webp) | ![](.wacky/rotate.webp) |
 

@@ -11,7 +11,7 @@
 
 ![Shirt Maker OpenGraph Banner](public/og_banner.jpg)
 
-Welcome there! **Shirt Maker 3D** is a website where you can make mockups of shirts with by uploading your own image. [Check it here](https://bastiasa.github.io/shirt_maker).
+Welcome! **Shirt Maker 3D** is a website where you can make mockups of shirts with by uploading your own image. [Check it here](https://bastiasa.github.io/shirt_maker).
 
 | ![](.wacky/hrotate.webp) | ![](.wacky/vrotate.webp) | ![](.wacky/scale.webp) |
 | - | - | - |

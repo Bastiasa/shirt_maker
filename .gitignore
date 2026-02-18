@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+.wacky/*.mp4
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

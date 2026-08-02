@@ -1,8 +1,14 @@
 {
-  "name": "vite",
+  "name": "shirt-maker",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+
+  "author": {
+    "name": "Luis Bastidas",
+    "email": "leysantqm@gmail.com",
+    "url": "https://bastiasa.github.io"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
